@@ -6,6 +6,14 @@ public:
     int x, y, z;
     Coordinate() : x(0), y(0), z(0) {}
     Coordinate(int x, int y, int z) : x(x), y(y), z(z) {}
+
+    long long get_distance_squared(Coordinate other) {
+        long long dx = x - other.x;
+        long long dy = y - other.y;
+        long long dz = z - other.z;
+
+        return dx * dx + dy * dy + dz * dz;
+    }
 };
 
 class Node {
@@ -15,20 +23,16 @@ public:
     Node(int id) : id(id) {}
     Node(int id, Coordinate coordinate) : id(id), coordinate(coordinate) {}
 
-    int get_distance_squared(Node other) {
-        long long dx = coordinate.x - other.coordinate.x;
-        long long dy = coordinate.y - other.coordinate.y;
-        long long dz = coordinate.z - other.coordinate.z;
-
-        return dx * dx + dy * dy + dz * dz;
+    long long get_distance_squared(Node other) {
+        return coordinate.get_distance_squared(other.coordinate);
     }
 };
 
 class Edge {
 public:
     Node from, to;
-    int weight_squared;
-    Edge(Node from, Node to, int weight_squared) : from(from), to(to), weight_squared(weight_squared) {}
+    long long weight_squared;
+    Edge(Node from, Node to, long long weight_squared) : from(from), to(to), weight_squared(weight_squared) {}
 };
 
 class Graph {
