@@ -13,31 +13,43 @@ class MST:
         weighted_edges = {}
         for u, v in edges:
             weighted_edges[(u,v)] = int(graph.get_edge_data(u,v)["weight"])
-        weighted_edges = sorted(weighted_edges.items(), key=lambda x: x[1], reverse=True)
+        weighted_edges = sorted(weighted_edges.items(), key=lambda x: x[1])
 
         # dropping self loops in weighted edge
         i = len(weighted_edges) - 1
-        print(i)
+        # print(i)
         while (weighted_edges[i][1] == 0):
             i -= 1
         weighted_edges = weighted_edges[:i]
 
-        if DEBUG:
-            print("MST weighted Edges: ",weighted_edges)
+        # if DEBUG:
+        #     print("MST weighted Edges: ",weighted_edges)
 
         disjoin_set = dsu.DSU(graph.nodes)
         mst_graph = nx.Graph()
         edge_count = 0
         edge_target = graph.number_of_nodes() - 1
+        self.cost = 0
+        eps = 1e-9
+
+        
+        start = 0
+        end = (start + k) % len(weighted_edges)
+
         while edge_count != edge_target:
-            k_ = min(k, len(weighted_edges))
-            weights = np.array([e[1] for e in weighted_edges[-k_:]])
-            weights = (weights - np.mean(weights)) / np.std(weights)
+            l = len(weighted_edges)
+            # print(start, end)
+            if start > end:
+                weights = np.array([e[1] for e in weighted_edges[start:]] + [e[1] for e in weighted_edges[:end]])
+            else:
+                weights = np.array([e[1] for e in weighted_edges[start:end]])
+            weights = (weights - np.mean(weights)) / max(np.std(weights), eps)
             softmax_values = np.exp(-np.array(weights))
             probabilities = list(softmax_values / sum(softmax_values))
-            selected_edge_index = np.random.choice(np.arange(len(weights)), p=probabilities) + len(weighted_edges) - k_
+            selected_edge_index = (np.random.choice(np.arange(len(weights)), p=probabilities) + start) % l
+            # print(selected_edge_index)
             selected_edge = weighted_edges[selected_edge_index]
-
+            
             u, v = selected_edge[0]
             if disjoin_set.find_parent(u) != disjoin_set.find_parent(v):
                 disjoin_set.union_sets(u, v)
@@ -45,7 +57,16 @@ class MST:
                 mst_graph.add_weighted_edges_from([(u,v,selected_edge[1])])
                 edge_count += 1
             
-            weighted_edges = weighted_edges[:selected_edge_index] + weighted_edges[selected_edge_index+1 :]
+            del weighted_edges[selected_edge_index]
+
+            # start = (end - 1) % l
+            # start = 0
+            if selected_edge_index != start:
+                start = start + 1
+            
+            # start = (selected_edge_index - 1) % l
+            end = (start + k) % l
+            
         return mst_graph
 
     def get_mst(self, graph: nx.Graph) -> nx.Graph:
