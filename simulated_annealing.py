@@ -4,7 +4,8 @@ import math
 import networkx as nx
 from itertools import pairwise
 
-# random.seed(0)
+random.seed(49)
+
 
 # %%
 class SimulateAnnealing:
@@ -66,8 +67,8 @@ class SimulateAnnealing:
         nodes = self.graph.number_of_nodes()
 
         neighbour = list(self.current_solution)[:-1]
-        l = random.randint(2, nodes-2)
-        i = random.randint(0, nodes-l)
+        l = random.randint(2, nodes - 2)
+        i = random.randint(0, nodes - l)
         neighbour[i : (i + l)] = reversed(neighbour[i : (i + l)])
 
         neighbour.append(neighbour[0])

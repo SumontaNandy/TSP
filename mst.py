@@ -4,6 +4,8 @@ import dsu
 
 DEBUG = True
 
+np.random.seed(49)
+
 
 class MST:
     def __init__(self) -> None:
