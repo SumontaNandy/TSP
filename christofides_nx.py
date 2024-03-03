@@ -20,7 +20,7 @@ for k in range(10):
     print(mst.get_mst_cost())
 # utils.plot_graph(tree, 'mst.png') 
 
-# tsp = nx.algorithms.approximation.traveling_salesman.christofides
-# path = tsp(graph, tree=tree)
+tsp = nx.algorithms.approximation.traveling_salesman.christofides
+path = tsp(graph, tree=tree)
 
 # print(tsp)

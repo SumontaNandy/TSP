@@ -2,7 +2,7 @@ import networkx as nx
 import numpy as np
 import dsu
 
-DEBUG = True
+DEBUG = False
 class MST:
     def __init__(self) -> None:
         self.cost = 0
