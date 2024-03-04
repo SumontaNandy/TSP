@@ -1,4 +1,4 @@
-name,dimension,c_apx_ratio,c_sa_ratio,improvement
+name,dimension,c_apx_ratio,best_sa_apx_ratio,improvement
 fri26,26,1.054429,1.03095,0.023479
 bays29,29,1.083168,1.006436,0.076733
 swiss42,42,1.098979,1.087981,0.010998

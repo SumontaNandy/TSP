@@ -1,4 +1,4 @@
-Name,Dimension,C APX,RC APX,Best k,Improvement
+name,dimension,c_apx_ratio,best_apx_ratio,best_tour_k,improvement
 fri26,26,1.054429,1.037353,10,0.017076
 bays29,29,1.083168,1.048515,11,0.034653
 swiss42,42,1.098979,1.069128,16,0.029851
