@@ -4,14 +4,14 @@ import dsu
 
 DEBUG = True
 
-np.random.seed(49)
-
 
 class MST:
     def __init__(self) -> None:
         self.cost = 0
 
-    def get_mst_k(self, graph: nx.Graph, k: int) -> nx.Graph:
+    def get_mst_k(graph: nx.Graph, k: int, seed: int = 49) -> nx.Graph:
+        np.random.seed(seed)
+
         edges = graph.edges
 
         weighted_edges = {}
@@ -21,19 +21,15 @@ class MST:
 
         # dropping self loops in weighted edge
         i = len(weighted_edges) - 1
-        # print(i)
+
         while weighted_edges[i][1] == 0:
             i -= 1
         weighted_edges = weighted_edges[:i]
-
-        # if DEBUG:
-        #     print("MST weighted Edges: ",weighted_edges)
 
         disjoin_set = dsu.DSU(graph.nodes)
         mst_graph = nx.Graph()
         edge_count = 0
         edge_target = graph.number_of_nodes() - 1
-        self.cost = 0
         eps = 1e-9
 
         start = 0
@@ -41,7 +37,6 @@ class MST:
 
         while edge_count != edge_target:
             l = len(weighted_edges)
-            # print(start, end)
             if start > end:
                 weights = np.array(
                     [e[1] for e in weighted_edges[start:]]
@@ -55,24 +50,17 @@ class MST:
             selected_edge_index = (
                 np.random.choice(np.arange(len(weights)), p=probabilities) + start
             ) % l
-            # print(selected_edge_index)
             selected_edge = weighted_edges[selected_edge_index]
 
             u, v = selected_edge[0]
             if disjoin_set.find_parent(u) != disjoin_set.find_parent(v):
                 disjoin_set.union_sets(u, v)
-                self.cost += selected_edge[1]
                 mst_graph.add_weighted_edges_from([(u, v, selected_edge[1])])
                 edge_count += 1
 
             del weighted_edges[selected_edge_index]
 
-            # start = (end - 1) % l
             start = 0
-            # if selected_edge_index != start:
-            #     start = start + 1
-
-            # start = (selected_edge_index - 1) % l
             end = (start + k) % l
 
         return mst_graph

@@ -4,9 +4,6 @@ import math
 import networkx as nx
 from itertools import pairwise
 
-random.seed(49)
-
-
 # %%
 class SimulateAnnealing:
     def __init__(
@@ -16,7 +13,10 @@ class SimulateAnnealing:
         cooling_rate: float = 0.01,
         max_iterations: int = 10,
         initial_solution: list = None,
+        seed: int = 49,
     ):
+        random.seed(seed)
+
         self.graph = graph
 
         self.current_solution = initial_solution  # [1, 2, 3, 4, 1]
